@@ -1,74 +1,25 @@
-from selenium import webdriver
-from html import unescape
-import csv
-import bs4
-import random
-import time
+from functions_twiter import open_and_login, scroll, scroll_to_bottom
+from functions_twiter import collect_full_timeline
+import pandas as pd
 
-driver = webdriver.Chrome('chromedriver.exe')
-driver.get('https://www.twitter.com')
+pd.set_option('display.max_rows', 500)
+pd.set_option('display.max_columns', 500)
+pd.set_option('display.width', 1000)
 
-button = driver.find_element_by_xpath('//*[@id="doc"]/div/div[1]/div[1]/div[2]/div[2]/div/a[2]')
-button.click()
+print("WARNING", "\n", "You can enter your username and password here or you can read it in through a separate file called pw.py. ", "\n",
+      "Note that there is no error control on this part. If you provide wrong login credentials that's your problem :)", "\n",
+      "If you plan on using a pw.py file, just leave at least one of the fields empty", "\n")
+login = input("input login: ")
+pw = input("input password: ")
 
-time.sleep(2)
+if len(login) == 0 or len(pw) == 0:
+    print("trying to read credentials from pw.py file")
+    import pw
+    login = pw.login
+    pw = pw.psw
 
-driver.find_element_by_xpath('//*[@id="page-container"]/div/div[1]/form/fieldset/div[1]/input').send_keys('fdgrove')
-driver.find_element_by_xpath('//*[@id="page-container"]/div/div[1]/form/fieldset/div[2]/input').send_keys('@hxeini60')
-driver.find_element_by_xpath('//*[@id="page-container"]/div/div[1]/form/div[2]/button').click()
+driver = open_and_login('firefox', login, pw)
+scroll_to_bottom(driver, security=1)
 
-time.sleep(2)
-driver.find_element_by_xpath('//*[@id="react-root"]/div/div/div[1]/div/div/div[2]/div/div/span/span').click()
-
-# scrolling down to the bottom of a page
-
-#solution 1
-# https://stackoverflow.com/questions/20986631/how-can-i-scroll-a-web-page-using-selenium-webdriver-in-python
-
-# Get scroll height
-last_height = driver.execute_script("return document.body.scrollHeight")
-
-while True:
-    # Scroll down to bottom
-    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-
-    # Wait to load page
-    time.sleep(random.randint(0, 10))
-
-    # Calculate new scroll height and compare with last scroll height
-    new_height = driver.execute_script("return document.body.scrollHeight")
-    if new_height == last_height:
-        break
-    last_height = new_height
-
-
-
-#solution 2
-last_height = driver.execute_script("return document.body.scrollHeight")
-new_height = 0
-
-while last_height != new_height:
-from selenium.webdriver.common.keys import Keys
-driver.find_element_by_tag_name('body').send_keys(Keys.CONTROL + Keys.END)
-driver.find_element_by_tag_name('body').send_keys(Keys.PAGE_DOWN)
-
-# HTML from `<html>`
-#all = driver.execute_script("return document.documentElement.outerHTML;")
-#all = driver.execute_script("return document.body.outerHTML;")
-
-all = driver.page_source
-html_dump = bs4.BeautifulSoup(all, 'html.parser')
-results = html_dump.find_all("div", {"data-testid" : "tweet"})
-hyperlinks = html_dump.find_all("a", href = True)
-
-for link in hyperlinks:
-    if 'status' in link['href'] and not '/photo/' in link['href']:
-        print(link['href'])
-
-for index, result in enumerate(results):
-    print(index)
-    print(result.text)
-
-
-e = driver.find_element_by_xpath('//*[@id="react-root"]/div/div/div/main/div/div/div/div[1]/div/div[2]/section/div/div/div/div[25]')
-e.text
+timeline = collect_full_timeline(driver, testing=False, test_runs=2, return_cleaned=True, write_csv=True)
+#print(timeline)
