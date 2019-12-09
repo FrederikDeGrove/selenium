@@ -18,7 +18,7 @@ if len(login) == 0 or len(pw) == 0:
     login = pw.login
     pw = pw.psw
 
-driver = open_and_login('firefox', login, pw)
+driver = open_and_login('chrome', login, pw)
 scroll_to_bottom(driver, security=1)
 
 timeline = collect_full_timeline(driver, testing=False, test_runs=2, return_cleaned=True, write_csv=True)
