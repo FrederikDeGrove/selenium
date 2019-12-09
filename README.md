@@ -8,6 +8,9 @@ At the moment, there is a functional timeline scraper. It collects basic informa
 You will need to install Python on your machine:
 1. https://realpython.com/installing-python/
 
+And to make life a lot easier, also install Pycharm (makes working with Python a bit easier):
+1. https://www.jetbrains.com/pycharm/
+
 You will need the following packages:
 1. selenium (https://pypi.org/project/selenium/) -> pip install selenium,
 2. pandas -> pip install pandas,
