@@ -15,7 +15,7 @@ You will need the following packages:
 
 To make the script running: 
 
-1. make sure you have a Twitter account with login information (user name and pswd)
-2. add geckodriver or chromedriver to the directory in which you copy the files of this repository
-3. run twitter_scraping.py, sit back and let the tweets come in
+1. make sure you have a Twitter account with login information (user name and pswd),
+2. add geckodriver or chromedriver to the directory in which you copy the files of this repository (download chromedriver here: https://chromedriver.chromium.org/downloads),
+3. run twitter_scraping.py, sit back and let the tweets come in.
  
