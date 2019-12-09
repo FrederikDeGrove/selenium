@@ -11,7 +11,7 @@ You will need to install Python on your machine:
 And to make life a lot easier, also install Pycharm (makes working with Python a bit easier):
 1. https://www.jetbrains.com/pycharm/
 
-You will need the following packages:
+You will need the following packages (if you don't know how to do this, don't worry, from here on we can do this together during the demo):
 1. selenium (https://pypi.org/project/selenium/) -> pip install selenium,
 2. pandas -> pip install pandas,
 3. beautifulsoup (https://pypi.org/project/beautifulsoup4/) -> pip install beautifulsoup4.
