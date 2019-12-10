@@ -1,2 +1,2 @@
-login = ''
-psw = ''
+login = 'enter login'
+psw = 'enter password'
