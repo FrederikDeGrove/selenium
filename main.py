@@ -1,7 +1,6 @@
 from selenium import webdriver
-from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 import time
-import pw
+import pas
 from selenium.webdriver.common.keys import Keys
 import pandas as pd
 import bs4
@@ -15,8 +14,8 @@ if status:
     driver.get('https://www.twitter.com')
     time.sleep(5)
     # login
-    driver.find_element_by_name('session[username_or_email]').send_keys('name')
-    driver.find_element_by_name('session[password]').send_keys('pswd')
+    driver.find_element_by_name('session[username_or_email]').send_keys(pas.login)
+    driver.find_element_by_name('session[password]').send_keys(pas.pasword)
     driver.find_element_by_xpath("//*[contains(text(), 'Log in')]").click()
     time.sleep(5)
     try:
@@ -30,9 +29,6 @@ def capture_tweets(driver, css_selector="div[class='css-1dbjc4n r-1iusvr4 r-16y2
     # current selector is based on page inspection - might change
     tweets = html_page.select(css_selector)
     return tweets
-
-x = capture_tweets(driver)
-
 
 def capture_ẗweet_data(tweets):
     # tweets is a list containing a number of BS4 tag objects
@@ -67,8 +63,6 @@ def capture_ẗweet_data(tweets):
                        columns=["sender", "datetime", "text", "comments", "retweets", "likes", "tweet_url"])
     return kle
 
-
-
 def scroll(driver, key1=Keys.HOME, key2=None):
     # as a standard it scrolls to top of the page using the home key but any key can be used
     # this should always be a call to the Keys function
@@ -77,8 +71,7 @@ def scroll(driver, key1=Keys.HOME, key2=None):
     else:
         driver.find_element_by_tag_name('body').send_keys(key1)
 
-
-def scroll_to_bottom(driver, security=3):
+def scroll_to_bottom(driver, security=1):
     # https://stackoverflow.com/questions/20986631/how-can-i-scroll-a-web-page-using-selenium-webdriver-in-python
     # higher security means that we will keep on trying more times to scroll to the bottom
     # the reason for this is that Twitter sometimes loads slowly so with low security you run the danger of
@@ -99,7 +92,6 @@ def scroll_to_bottom(driver, security=3):
             last_height = new_height
     scroll(driver, Keys.CONTROL, Keys.DOWN)
     return print("we reached the bottom aye aye")
-
 
 def collect_full_timeline(driver, testing=False, test_runs=3, return_cleaned=True, write_csv=True):
     #write_csv writes the dataframe to a csv file named timeline.csv in the current folder
@@ -135,7 +127,7 @@ def collect_full_timeline(driver, testing=False, test_runs=3, return_cleaned=Tru
     return twets
 
 scroll_to_bottom(driver, security=1)
-timeline = collect_full_timeline(driver, testing=True, test_runs=2, return_cleaned=True, write_csv=True)
+timeline = collect_full_timeline(driver, testing=True, test_runs=4, return_cleaned=True, write_csv=True)
 
 
 
